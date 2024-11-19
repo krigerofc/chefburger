@@ -1,32 +1,31 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+import   Link from 'next/link';
 
 const RegisterForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [hashScrete, setHashScrete] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setconfirm] = useState('')
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const SubmitForm = async(e) =>{
+    e.preventDefault()
 
-    // Enviar dados para a API
-    const response = await fetch('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ name, email, hashScrete, password }),
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch('http://localhost:3000/api/user/register', {
+      method:'POST',
+      body:JSON.stringify({name, email, hashScrete, password, confirmPassword}),
+      headers: {'Content-Type':'application/json'},
     });
 
-    const data = await response.json();
+    const data = await response.json()
 
-    if (data.error) {
+    if(data.error){
       setError(data.error);
     } else {
-      // Registro bem-sucedido
-      console.log('Usuário registrado com sucesso:', data);
+      console.log(data);
     }
   };
 
@@ -34,7 +33,7 @@ const RegisterForm = () => {
     <div className="bg-yellow-100 min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold text-orange-500 mb-6">Chef Burger Registro</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={SubmitForm}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
               Nome
@@ -88,6 +87,20 @@ const RegisterForm = () => {
               placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+              Confirmar senha
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
+              type="password"
+              placeholder="Digite sua senha"
+              value={confirmPassword}
+              onChange={(e) => setconfirm(e.target.value)}
               required
             />
           </div>
