@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-const db = PrismaClient();
+const database = new PrismaClient();
 
-export default db;
+export default database;

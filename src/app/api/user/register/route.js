@@ -1,12 +1,14 @@
+import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
     try {
         const { name, email, hashScrete, password, confirmPassword} = await req.json();
+        const bcrypt = require('bcrypt')
 
         // Validação dos dados
         const trimmed_name = name.trim().toLowerCase();
-        const trimmed_email = email.trim();
+        const trimmed_email = email.trim().toLowerCase();
         const trimmed_hash = hashScrete;
         const trimmed_password = password?.trim();
         const trimmed_confirmPassword = confirmPassword?.trim();
@@ -40,11 +42,11 @@ export async function POST(req) {
         //validation name
         const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/g;
         if (specialCharRegex.test(trimmed_name)) {
-        throw new Error('O nome não pode conter caracteres especiais');
+        return NextResponse.json({ message: 'O nome não pode conter caracteres especiais' });
         }
         const nameFormatRegex = /^[A-Za-z\s]+$/;
         if (!nameFormatRegex.test(trimmed_name)) {
-        throw new Error('O nome deve conter apenas letras e espaços');
+        return NextResponse.json({ message: 'O nome deve conter apenas letras e espaços' });
         }
 
 
@@ -52,16 +54,25 @@ export async function POST(req) {
         // hash number validation
         const numericRegex = /^\d+$/;
         if (!numericRegex.test(trimmed_hash)) {
-        throw new Error('O código de inscrição deve conter apenas números');
+        return NextResponse.json({ message: 'O código de inscrição deve conter apenas números' });
         }
-
-
         //DATABASE VALIDATION
+        try{
+            const prisma = PrismaClient()
+            const User = await prisma.User.create({
+                data:{
+                    name:trimmed_name,
+                    email:trimmed_email,
+                    password:password,
+                },
+             })
+        } catch (error){
+            return NextResponse.json({error:'ta bem paia isso'});
+        }
 
         // Se todas as validações passarem
         return NextResponse.json({ message: 'Dados recebidos com sucesso' });
     } catch (error) {
-        console.error('Erro ao processar a solicitação:', error);
         return NextResponse.json({ error: 'Erro ao processar a solicitação' }, { status: 500 });
     }
 }

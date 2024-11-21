@@ -25,7 +25,7 @@ const RegisterForm = () => {
     if(data.error){
       setError(data.error);
     } else {
-      console.log(data);
+      setError('User criado')
     }
   };
 
