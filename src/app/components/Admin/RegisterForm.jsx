@@ -10,6 +10,7 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirm] = useState('')
   const [error, setError] = useState('');
+  const [register, setRegister] = useState('')
 
   const SubmitForm = async(e) =>{
     e.preventDefault()
@@ -24,8 +25,14 @@ const RegisterForm = () => {
 
     if(data.error){
       setError(data.error);
-    } else {
-      setError('User criado')
+      setRegister('')
+    }
+    else{
+      if(data.create === true){
+        setRegister('Conta criada com sucesso')
+        setError('')
+      }else{
+        setError('Falha ao criar o usuário, verifique as informações de cadastro')}
     }
   };
 
@@ -105,6 +112,7 @@ const RegisterForm = () => {
             />
           </div>
           {error && <p className="text-red-500 text-xs italic">{error}</p>}
+          {register && <p className="text-green-500 text-xs italic">{register}</p>}
           <div className="flex items-center justify-center">
             <button
               className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
