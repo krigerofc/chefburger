@@ -22,6 +22,38 @@ model Product {
   name        String // Nome do produto, obrigatório
   description String // Descrição do produto, obrigatório
   price       Float  // Preço do produto, obrigatório
+  sales       Float  // Preço do produto, obrigatório
   discount    Float  // Desconto no produto, obrigatório
   type        String // Tipo do produto (comida ou bebida), obrigatório (armazena "FOOD" ou "BEVERAGE" como string)
+}
+
+model Top_Product {
+  id          Int    @id @default(autoincrement())
+  name        String // Nome do produto, obrigatório
+  description String // Descrição do produto, obrigatório
+  price       Float  // Preço do produto, obrigatório
+  sales      Float  // Preço do produto, obrigatório
+  discount    Float  // Desconto no produto, obrigatório
+  type        String // Tipo do produto (comida ou bebida), obrigatório (armazena "FOOD" ou "BEVERAGE" como string)
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  name      String
+  address   String
+  phone     String
+  status    String
+  paymant   String
+  createdAt DateTime    @default(now())
+  total     Float
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
 }

@@ -12,7 +12,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     // Enviar dados para a API
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('/api/user/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: { 'Content-Type': 'application/json' },
@@ -20,11 +20,11 @@ const LoginForm = () => {
 
     const data = await response.json();
 
-    if (data.error) {
+    if (data.login) {
       setError(data.error);
     } else {
+      setError('deu certo');
       // Login bem-sucedido
-      console.log('Login bem-sucedido:', data);
     }
   };
 
